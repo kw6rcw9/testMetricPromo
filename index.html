@@ -107,5 +107,11 @@
       Telegram.WebApp.expand()
       Telegram.WebApp.ready()
     </script>
+    <script>
+  setTimeout(() => {
+    analytics.logEvent("test_js_event", {source: "auto"});
+    console.log("📡 Test Firebase event sent");
+  }, 2000);
+</script>
   </body>
 </html>
