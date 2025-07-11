@@ -32,6 +32,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
 
     <script>
+       // Включаем debug режим — чтобы DebugView точно сработал
+      document.cookie = "_ga=GA1.1.debug";
       const firebaseConfig = {
         apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
         authDomain: "promoithub.firebaseapp.com",
@@ -59,6 +61,14 @@
           console.error("[Firebase] Error parsing params", e);
         }
       }
+        // 💡 Автоматически отправляем тест-событие
+  setTimeout(() => {
+    analytics.logEvent("webgl_test_event", {
+      from: "init",
+      debug_mode: true // 💥 debug для гарантии
+    });
+    console.log("📡 Sent test event");
+  }, 3000);
     </script>
   </head>
 
