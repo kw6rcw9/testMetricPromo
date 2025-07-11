@@ -1,72 +1,68 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
-    />
-    <title>Unity WebGL Player | promoIthub</title>
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        overflow: hidden;
-      }
-      #unity-container {
-        width: 540px;
-        height: 1140px;
-        margin: auto;
-        position: relative;
-      }
-
-      canvas {
-        width: 100% !important;
-        height: 100% !important;
-        max-width: 540px !important;
-        max-height: 1140px !important;
-        image-rendering: pixelated;
-        background: black;
-        display: block;
-      }
-    </style>
-
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
- 
- <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
-    authDomain: "promoithub.firebaseapp.com",
-    databaseURL: "https://promoithub-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "promoithub",
-    storageBucket: "promoithub.firebasestorage.app",
-    messagingSenderId: "744750948753",
-    appId: "1:744750948753:web:8576dbb3800f661044fa30",
-    measurementId: "G-WN4N1B0WGL"
-  };
-
-  // Инициализация Firebase
-  firebase.initializeApp(firebaseConfig);
-  const analytics = firebase.analytics();
-
-  function sendAnalyticsEvent(eventName, paramsJson) {
-    try {
-      const params = JSON.parse(paramsJson);
-      analytics.logEvent(eventName, params);
-      console.log("[Firebase] Event sent:", eventName, params);
-    } catch (e) {
-      console.error("[Firebase] Error parsing params", e);
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+  <title>Unity WebGL Player | promoIthub</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
     }
-  }
-</script>
-  </head>
+    #unity-container {
+      width: 540px;
+      height: 1140px;
+      margin: auto;
+      position: relative;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 540px !important;
+      max-height: 1140px !important;
+      image-rendering: pixelated;
+      background: black;
+      display: block;
+    }
+  </style>
+
+  <!-- Telegram SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- ✅ Старый SDK Firebase, совместимый с Unity WebGL -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
+      authDomain: "promoithub.firebaseapp.com",
+      databaseURL: "https://promoithub-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "promoithub",
+      storageBucket: "promoithub.firebasestorage.app",
+      messagingSenderId: "744750948753",
+      appId: "1:744750948753:web:8576dbb3800f661044fa30",
+      measurementId: "G-WN4N1B0WGL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const analytics = firebase.analytics();
+
+    function sendAnalyticsEvent(eventName, paramsJson) {
+      try {
+        const params = JSON.parse(paramsJson);
+        analytics.logEvent(eventName, params);
+        console.log("[Firebase] Event sent:", eventName, params);
+      } catch (e) {
+        console.error("[Firebase] Error parsing params", e);
+      }
+    }
+  </script>
+</head>
+
 
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
     <canvas id="unity-canvas" width=540 height=1140 tabindex="-1" style="width: 540px; height: 1140px; background: #231F20"></canvas>
@@ -107,7 +103,7 @@
       Telegram.WebApp.expand()
       Telegram.WebApp.ready()
     </script>
-    <script>
+<script>
   setTimeout(() => {
     analytics.logEvent("test_js_event", {source: "auto"});
     console.log("📡 Test Firebase event sent");
