@@ -1,91 +1,74 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
-  <title>Unity WebGL Player | promoIthub</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
-    }
-    #unity-container {
-      width: 540px;
-      height: 1140px;
-      margin: auto;
-      position: relative;
-    }
-    canvas {
-      width: 100% !important;
-      height: 100% !important;
-      max-width: 540px !important;
-      max-height: 1140px !important;
-      image-rendering: pixelated;
-      background: black;
-      display: block;
-    }
-  </style>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
+    <title>Unity WebGL Firebase Test</title>
 
-  <!-- Telegram SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <!-- ✅ Старый SDK Firebase, совместимый с Unity WebGL -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
-      authDomain: "promoithub.firebaseapp.com",
-      databaseURL: "https://promoithub-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "promoithub",
-      storageBucket: "promoithub.firebasestorage.app",
-      messagingSenderId: "744750948753",
-      appId: "1:744750948753:web:8576dbb3800f661044fa30",
-      measurementId: "G-WN4N1B0WGL"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const analytics = firebase.analytics();
-
-    function sendAnalyticsEvent(eventName, paramsJson) {
-      try {
-        const params = JSON.parse(paramsJson);
-        analytics.logEvent(eventName, params);
-        console.log("[Firebase] Event sent:", eventName, params);
-      } catch (e) {
-        console.error("[Firebase] Error parsing params", e);
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: black;
       }
-    }
-  </script>
-</head>
 
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+        background: #000;
+        display: block;
+      }
+    </style>
 
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=540 height=1140 tabindex="-1" style="width: 540px; height: 1140px; background: #231F20"></canvas>
+    <!-- ✅ Firebase SDK (старая версия, подходящая для Unity WebGL) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
+        authDomain: "promoithub.firebaseapp.com",
+        databaseURL: "https://promoithub-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "promoithub",
+        storageBucket: "promoithub.firebasestorage.app",
+        messagingSenderId: "744750948753",
+        appId: "1:744750948753:web:8576dbb3800f661044fa30",
+        measurementId: "G-WN4N1B0WGL"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const analytics = firebase.analytics();
+
+      // ✅ Включаем сбор аналитики явно
+      firebase.analytics().setAnalyticsCollectionEnabled(true);
+
+      // ✅ Функция для Unity
+      function sendAnalyticsEvent(eventName, paramsJson) {
+        try {
+          const params = JSON.parse(paramsJson);
+          analytics.logEvent(eventName, params);
+          console.log("[Firebase] Event sent:", eventName, params);
+        } catch (e) {
+          console.error("[Firebase] Error parsing params", e);
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <canvas id="unity-canvas" width="960" height="600"></canvas>
+
+    <!-- Замените пути на свои файлы билда -->
     <script src="Build/TestBuild.loader.js"></script>
     <script>
-      let telegramAppChatLabs = window.Telegram.WebApp;
-      let firstName = telegramAppChatLabs.initDataUnsafe.user.username;
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
-
-        document.body.style.textAlign = "left";
-      }
-
-      var myGameInstance = null;
+      var gameInstance = null;
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/TestBuild.data",
         frameworkUrl: "Build/TestBuild.framework.js",
@@ -95,19 +78,13 @@
         productName: "promoIthub",
         productVersion: "1.0",
       }).then((unityInstance) => {
-        myGameInstance = unityInstance;
-        myGameInstance.SendMessage('TELEGRAM', 'JsSendInfo', firstName);
+        gameInstance = unityInstance;
+
+        // 🧪 Автотест — отправка события через 3 секунды
+        setTimeout(() => {
+          sendAnalyticsEvent("webgl_test_event", JSON.stringify({ source: "html_standalone" }));
+        }, 3000);
       });
     </script>
-    <script>
-      Telegram.WebApp.expand()
-      Telegram.WebApp.ready()
-    </script>
-<script>
-  setTimeout(() => {
-    analytics.logEvent("test_js_event", {source: "auto"});
-    console.log("📡 Test Firebase event sent");
-  }, 2000);
-</script>
   </body>
 </html>
