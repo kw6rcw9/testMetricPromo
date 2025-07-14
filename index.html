@@ -28,12 +28,13 @@
     </style>
 
     <!-- ✅ Firebase SDK (старая версия, подходящая для Unity WebGL) -->
+     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
 
     <script>
        // Включаем debug режим — чтобы DebugView точно сработал
-      document.cookie = "_ga=GA1.1.debug";
+      
       const firebaseConfig = {
         apiKey: "AIzaSyBbQn_8VcMjx5YUUSov8MRVLeDeo5wUNuA",
         authDomain: "promoithub.firebaseapp.com",
@@ -61,14 +62,7 @@
           console.error("[Firebase] Error parsing params", e);
         }
       }
-        // 💡 Автоматически отправляем тест-событие
-  setTimeout(() => {
-    analytics.logEvent("webgl_test_event", {
-      from: "init",
-      debug_mode: true // 💥 debug для гарантии
-    });
-    console.log("📡 Sent test event");
-  }, 3000);
+       
     </script>
   </head>
 
@@ -78,6 +72,8 @@
     <!-- Замените пути на свои файлы билда -->
     <script src="Build/TestBuild.loader.js"></script>
     <script>
+       let telegramAppChatLabs = window.Telegram.WebApp;
+      let firstName = telegramAppChatLabs.initDataUnsafe.user.username;
       var gameInstance = null;
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/TestBuild.data",
@@ -88,13 +84,14 @@
         productName: "promoIthub",
         productVersion: "1.0",
       }).then((unityInstance) => {
-        gameInstance = unityInstance;
-
-        // 🧪 Автотест — отправка события через 3 секунды
-        setTimeout(() => {
-          sendAnalyticsEvent("webgl_test_event", JSON.stringify({ source: "html_standalone" }));
-        }, 3000);
-      });
+            myGameInstance = unityInstance;
+            myGameInstance.SendMessage('TELEGRAM', 'JsSendInfo', firstName);
+            
+        });
+    </script>
+    <script>
+      Telegram.WebApp.expand()
+      Telegram.WebApp.ready()
     </script>
   </body>
 </html>
